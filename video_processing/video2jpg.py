@@ -69,12 +69,14 @@ def train_val_split(dir_path, valid_dir_path, class_name, val_part=0.2):
 
 
 if __name__ == "__main__":
-    dir_path = 'video/'
-    dst_dir_path = 'train/'
-    valid_dir_path = 'valid/'
+    dir_path = 'data/video2jpg/video/'
+    dst_dir_path = 'data/video2jpg/train/'
+    valid_dir_path = 'data/video2jpg/valid/'
 
     types = ['.avi', '.mp4']
 
+    val_part = 0.2
+
     for class_name in os.listdir(dir_path):
         class_process(dir_path, dst_dir_path, class_name, types)
-    # train_val_split(dst_dir_path, valid_dir_path, class_name)
+        # train_val_split(dst_dir_path, valid_dir_path, class_name, val_part)
