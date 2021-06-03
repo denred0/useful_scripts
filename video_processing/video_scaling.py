@@ -28,11 +28,11 @@ def scale_videos(dir_path, dst_dir_path, types, width, height, maxSize=1024):
 
 
 if __name__ == "__main__":
-    dir_path = os.path.join('data', 'video2jpg', 'scale_videos', 'to_scale')
-    dst_dir_path = os.path.join('data', 'video2jpg', 'scale_videos', 'scaled')
+    dir_path = os.path.join('data', 'video_processing', 'scale_videos', 'to_scale')
+    dst_dir_path = os.path.join('data', 'video_processing', 'scale_videos', 'scaled')
     types = ['.avi', '.mp4']
 
-    width = 320
-    height = 240
+    width = 330
+    height = 256
 
     scale_videos(dir_path, dst_dir_path, types, width, height)
