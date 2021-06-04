@@ -49,7 +49,8 @@ def get_settings(from_user=False):
         print(class_message)
         return num_defects, classes_template, class_message
     else:
-        classes_template = {0: 'nodefect', 1: 'plasticade', 2: 'dirty', 3: 'otherdefect', 4: 'uncertain'}
+        # classes_template = {0: 'nodefect', 1: 'plasticade', 2: 'dirty', 3: 'otherdefect', 4: 'uncertain'}
+        classes_template = {0: 'usual', 1: 'two_fingers', 2: 'other'}
 
         num_defects = len(classes_template)
         print('У вас установлены следующие виды классов:')
@@ -105,7 +106,9 @@ def main():
     orig_suffix = '_Changed_Orig.png'
     changed_suffix = '_Changed.jpg'
     root = '.'
-    camera = 'cam4'
+    camera = 'hands'
+    window_width = 400
+
     folder_sorted = Path('data').joinpath('manual_labeling_images').joinpath('sorted_folder').joinpath(camera)
     folder_to_sort = Path('data').joinpath('manual_labeling_images').joinpath('to_sort').joinpath(camera)
 
@@ -127,10 +130,10 @@ def main():
         orig_file_path = f'{root}/{file}'
 
         orig_img = cv2.imread(orig_file_path, cv2.IMREAD_COLOR)
-        orig_img = resize_with_aspect_ratio(orig_img, width=1700)
+        orig_img = resize_with_aspect_ratio(orig_img, width=window_width)
 
         # white rectangle
-        cv2.rectangle(orig_img, (0, 0), (235, 375), (255, 255, 255), -1)
+        # cv2.rectangle(orig_img, (0, 0), (235, 375), (255, 255, 255), -1)
 
         x_start = 10
         y_start = 30

@@ -45,7 +45,7 @@ def cut_onto_img(data_dir, data_dst_img, data_dst_video, class_name, types, skip
             current_frames_arr = []
 
 
-def create_videos(data_dir, data_dst_video, video_ext, class_name, video_size=()):
+def create_videos(data_dir, data_dst_video, video_ext, class_name, frame_rate = 18, video_size=()):
     Path(os.path.join(data_dst_video, class_name)).mkdir(parents=True, exist_ok=True)
 
     for subdir, dirs, files in os.walk(os.path.join(data_dir, class_name)):
@@ -67,7 +67,7 @@ def create_videos(data_dir, data_dst_video, video_ext, class_name, video_size=()
 
             video_name = str(folder) + video_ext
             out = cv2.VideoWriter(os.path.join(data_dst_video, class_name, video_name), cv2.VideoWriter_fourcc(*'DIVX'),
-                                  16,
+                                  frame_rate,
                                   size_shape)
 
             for i in range(len(img_array)):
@@ -77,7 +77,7 @@ def create_videos(data_dir, data_dst_video, video_ext, class_name, video_size=()
 
 if __name__ == "__main__":
     # folder name that contains images in "_source" folder
-    class_name = 'case_1'
+    class_name = 'tst_bio'
 
     data_dir_img = os.path.join('data', 'video_processing', 'video_cutting', '_source')
     data_dst_img = os.path.join('data', 'video_processing', 'video_cutting', 'cut_img')
@@ -88,10 +88,8 @@ if __name__ == "__main__":
     types = ['.jpg']
     one_video_frames_count = 50  # about 2 seconds, normal fps is 24 frames/sec
 
-    data_dir_video = os.path.join('data', 'video_processing', 'video_cutting', 'cut_img')
-    data_dst_video = os.path.join('data', 'video_processing', 'video_cutting', 'cut_video')
-    video_size = (330, 256)
-    video_ext = '.avi'
+
+
 
     # cut_onto_img(data_dir=data_dir_img,
     #              data_dst_img=data_dst_img,
@@ -103,8 +101,18 @@ if __name__ == "__main__":
     #              create_videos=create_videos,
     #              video_ext=video_ext)
 
+
+    # create video from frames
+    data_dir_video = os.path.join('data', 'video_processing', 'video_cutting', 'cut_img')
+    data_dst_video = os.path.join('data', 'video_processing', 'video_cutting', 'cut_video')
+    video_size = ()
+    video_ext = '.avi'
+
+    frame_rate = 45 # frames per second in resulting video
+
     create_videos(data_dir=data_dir_video,
                   data_dst_video=data_dst_video,
                   video_ext=video_ext,
                   class_name=class_name,
+                  frame_rate=frame_rate,
                   video_size=video_size)
