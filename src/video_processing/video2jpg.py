@@ -1,11 +1,11 @@
-from __future__ import print_function, division
+# from __future__ import print_function, division
 import os
 import sys
 import subprocess
 import shutil
 
 
-def class_process(dir_path, dst_dir_path, class_name, types, maxSize=1024):
+def class_process(dir_path, dst_dir_path, class_name, types, img_ext, maxSize=1024):
     class_path = os.path.join(dir_path, class_name)
     if not os.path.isdir(class_path):
         return
@@ -30,11 +30,12 @@ def class_process(dir_path, dst_dir_path, class_name, types, maxSize=1024):
 
         try:
             if os.path.exists(dst_directory_path):
-                if not os.path.exists(os.path.join(dst_directory_path, 'image_00001.jpg')):
+                if not os.path.exists(os.path.join(dst_directory_path, 'image_00001.' + img_ext)):
                     subprocess.call('rm -r \"{}\"'.format(dst_directory_path), shell=True)
                     print('remove {}'.format(dst_directory_path))
                     os.makedirs(dst_directory_path)
                 else:
+                    print('Folders with images have already existed')
                     continue
             else:
                 os.makedirs(dst_directory_path)
@@ -43,7 +44,8 @@ def class_process(dir_path, dst_dir_path, class_name, types, maxSize=1024):
             continue
 
         # cmd = 'ffmpeg -i \"{}\" -vf scale=-1:240 \"{}/image_%05d.jpg\"'.format(video_file_path, dst_directory_path)
-        cmd = 'ffmpeg -i \"{}\" -qscale:v 2 \"{}/image_%05d.jpg\"'.format(video_file_path, dst_directory_path)
+        ext = 'jpg'
+        cmd = 'ffmpeg -i \"{}\" -qscale:v 2 \"{}/image_{}_%05d.{}\"'.format(video_file_path, dst_directory_path, name, img_ext)
 
         print(cmd)
         subprocess.call(cmd, shell=True)
@@ -76,8 +78,10 @@ if __name__ == "__main__":
 
     types = ['.avi', '.mp4']
 
+    img_ext = 'jpg'
+
     val_part = 0
 
     for class_name in os.listdir(dir_path):
-        class_process(dir_path, dst_dir_path, class_name, types)
+        class_process(dir_path, dst_dir_path, class_name, types, img_ext)
         # train_val_split(dst_dir_path, valid_dir_path, class_name, val_part)

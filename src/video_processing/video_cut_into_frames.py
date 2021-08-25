@@ -8,7 +8,7 @@ from os import walk
 import cv2
 
 
-def cut_onto_img(data_dir, data_dst_img, data_dst_video, class_name, types, skip_frames, one_video_frames_count):
+def cut_into_img(data_dir, data_dst_img, class_name, types, skip_frames, one_video_frames_count):
     current_frames_arr = []
     video_counter = 0
 
@@ -29,7 +29,8 @@ def cut_onto_img(data_dir, data_dst_img, data_dst_video, class_name, types, skip
 
             if len(current_frames_arr) == one_video_frames_count:
                 folder = str(video_counter) + '_' + class_name
-                Path(os.path.join(data_dst_img, class_name, folder)).mkdir(parents=True, exist_ok=True)
+                Path(os.path.join(data_dst_img, class_name, folder)).mkdir(parents=True,
+                                                                           exist_ok=True)
 
                 for frame in current_frames_arr:
                     shutil.copy(os.path.join(data_dir, class_name, frame),
@@ -45,7 +46,7 @@ def cut_onto_img(data_dir, data_dst_img, data_dst_video, class_name, types, skip
             current_frames_arr = []
 
 
-def create_videos(data_dir, data_dst_video, video_ext, class_name, frame_rate = 18, video_size=()):
+def create_videos(data_dir, data_dst_video, video_ext, class_name, frame_rate=18, video_size=()):
     Path(os.path.join(data_dst_video, class_name)).mkdir(parents=True, exist_ok=True)
 
     for subdir, dirs, files in os.walk(os.path.join(data_dir, class_name)):
@@ -65,7 +66,7 @@ def create_videos(data_dir, data_dst_video, video_ext, class_name, frame_rate = 
 
                 img_array.append(image)
 
-            video_name = str(folder) + video_ext
+            video_name = str(folder) + '_' + class_name + video_ext
             out = cv2.VideoWriter(os.path.join(data_dst_video, class_name, video_name), cv2.VideoWriter_fourcc(*'DIVX'),
                                   frame_rate,
                                   size_shape)
@@ -77,30 +78,38 @@ def create_videos(data_dir, data_dst_video, video_ext, class_name, frame_rate = 
 
 if __name__ == "__main__":
     # folder name that contains images in "_source" folder
-    class_name = 'tst_bio'
+    class_name = '12'
 
     data_dir_img = os.path.join('data', 'video_processing', 'video_cutting', '_source')
     data_dst_img = os.path.join('data', 'video_processing', 'video_cutting', 'cut_img')
 
     # list of intervals frames to skip. Format is [[startFrame1, endFrame1], [startFrame2, endFrame2], ...]
-    skip_frames = [[0, 10], [300, 400]]
+    skip_frames = []
+    # skip_frames = [[190, 250],
+    #                [580, 630],
+    #                [750, 800],
+    #                [1270, 1320],
+    #                [1420, 1470],
+    #                [1480, 1530],
+    #                [1610, 1660],
+    #                [1760, 1810],
+    #                [2230, 2280],
+    #                [3020, 3070],
+    #                [3990, 4040],
+    #                [10550, 10600],
+    #                [10630, 10680],
+    #                [10960, 11011],
+    #                [11260, 11310]]
 
     types = ['.jpg']
-    one_video_frames_count = 50  # about 2 seconds, normal fps is 24 frames/sec
+    one_video_frames_count = 30  # about 2 seconds, normal fps is 24 frames/sec
 
-
-
-
-    # cut_onto_img(data_dir=data_dir_img,
+    # cut_into_img(data_dir=data_dir_img,
     #              data_dst_img=data_dst_img,
-    #              data_dst_video=data_dst_video,
     #              class_name=class_name,
     #              types=types,
     #              skip_frames=skip_frames,
-    #              one_video_frames_count=one_video_frames_count,
-    #              create_videos=create_videos,
-    #              video_ext=video_ext)
-
+    #              one_video_frames_count=one_video_frames_count)
 
     # create video from frames
     data_dir_video = os.path.join('data', 'video_processing', 'video_cutting', 'cut_img')
@@ -108,7 +117,7 @@ if __name__ == "__main__":
     video_size = ()
     video_ext = '.avi'
 
-    frame_rate = 45 # frames per second in resulting video
+    frame_rate = 23  # frames per second in resulting video
 
     create_videos(data_dir=data_dir_video,
                   data_dst_video=data_dst_video,
