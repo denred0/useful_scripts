@@ -100,7 +100,7 @@ def delete_file_duplicates(folder, changed_suffix, orig_suffix):
 
 
 def main():
-    key_bindings = {48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5}
+    key_bindings = {48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9}
 
     types = ('*.jpeg', '*.jpg', '*.png')
     orig_suffix = '_Changed_Orig.png'
