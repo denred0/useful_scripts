@@ -50,7 +50,7 @@ def get_settings(from_user=False):
         return num_defects, classes_template, class_message
     else:
         # classes_template = {0: 'nodefect', 1: 'plasticade', 2: 'dirty', 3: 'otherdefect', 4: 'uncertain'}
-        classes_template = {0: 'usual', 1: 'two_fingers', 2: 'other'}
+        classes_template = {0: 'good', 1: 'bad', 2: 'other'}
 
         num_defects = len(classes_template)
         print('У вас установлены следующие виды классов:')
@@ -106,8 +106,8 @@ def main():
     orig_suffix = '_Changed_Orig.png'
     changed_suffix = '_Changed.jpg'
     root = '.'
-    camera = 'hands'
-    window_width = 400
+    camera = 'furniture'
+    window_width = 600
 
     folder_sorted = Path('data').joinpath('manual_labeling_images').joinpath('sorted_folder').joinpath(camera)
     folder_to_sort = Path('data').joinpath('manual_labeling_images').joinpath('to_sort').joinpath(camera)
@@ -168,7 +168,7 @@ def main():
 
         cv2.imshow(orig_file_path, orig_img)
         print(class_message)
-        print(f'{counter}/{num_files}')
+        print(f'{counter}/{num_files}, {round(counter/num_files * 100, 3)}%')
 
         key = cv2.waitKey()
         class_input = key_bindings[key]
