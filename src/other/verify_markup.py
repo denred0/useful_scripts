@@ -21,8 +21,8 @@ def supplement_images_txt(project_name, ext):
         recreate_folder(supplemented_dir.joinpath(label))
 
     for label in tqdm(classes_dir, desc="Collecting dataset"):
-        images = get_all_files_in_folder(root_dir.joinpath('labels').joinpath(label), [f"*.{ext}"])
-        txts = get_all_files_in_folder(root_dir.joinpath('labels').joinpath(label), [f"*.txt"])
+        images = get_all_files_in_folder(str(root_dir.joinpath('labels').joinpath(label)), [f"*.{ext}"])
+        txts = get_all_files_in_folder(str(root_dir.joinpath('labels').joinpath(label)), [f"*.txt"])
         for im, txt in zip(images, txts):
             shutil.copy(im, dataset_dir)
             shutil.copy(txt, dataset_dir)
@@ -32,8 +32,8 @@ def supplement_images_txt(project_name, ext):
     all_files = list(set(all_files))
 
     for label in tqdm(classes_dir, desc="Supplement images and txts"):
-        images = get_all_files_in_folder(root_dir.joinpath('labels').joinpath(label), [f"*.{ext}"])
-        txts = get_all_files_in_folder(root_dir.joinpath('labels').joinpath(label), [f"*.txt"])
+        images = get_all_files_in_folder(str(root_dir.joinpath('labels').joinpath(label)), [f"*.{ext}"])
+        txts = get_all_files_in_folder(str(root_dir.joinpath('labels').joinpath(label)), [f"*.txt"])
 
         for im, txt in zip(images, txts):
             shutil.copy(im, supplemented_dir.joinpath(label))
