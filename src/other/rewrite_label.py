@@ -27,7 +27,7 @@ def rewrite_label(input_dir: str, output_dir: str, new_label: str, ext_image: st
             for line in new_lines:
                 f.write("%s\n" % str(line))
 
-        shutil.copy("/".join(str(txt_path).split("/")[:-1]) + "/" + txt_path.stem + "." + ext_image, output_dir)
+        shutil.copy(txt_path.parent.joinpath(f"{txt_path.stem}.{ext_image}"), output_dir)
 
 
 if __name__ == "__main__":
@@ -37,5 +37,5 @@ if __name__ == "__main__":
     output_dir = "data/rewrite_label/output"
     recreate_folder(output_dir)
 
-    new_label = "0"
+    new_label = "7"
     rewrite_label(input_dir, output_dir, new_label, ext_image)

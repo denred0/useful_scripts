@@ -106,8 +106,8 @@ def main():
     orig_suffix = '_Changed_Orig.png'
     changed_suffix = '_Changed.jpg'
     root = '.'
-    camera = 'furniture'
-    window_width = 600
+    camera = 'fire'
+    window_width = 400
 
     folder_sorted = Path('data').joinpath('manual_labeling_images').joinpath('sorted_folder').joinpath(camera)
     folder_to_sort = Path('data').joinpath('manual_labeling_images').joinpath('to_sort').joinpath(camera)
