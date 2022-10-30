@@ -11,15 +11,20 @@ from typing import List
 
 from my_utils import get_all_files_in_folder, recreate_folder
 
+import warnings
 
-def train_val_split(input_dir, images_ext, split_train_dir, split_val_dir):
+warnings.filterwarnings("ignore")
+
+
+def train_val_split(input_dir, images_ext, split_train_dir, split_val_dir, val_part):
     # root_images_dir = input_dir.parent.absolute().joinpath('images')
     all_images = get_all_files_in_folder(str(input_dir), [f'*.{images_ext}'])
     all_txts = get_all_files_in_folder(str(input_dir), ['*.txt'])
-    print(f'Total images: {len(all_images)}')
-    print(f'Total labels: {len(all_txts)}')
 
-    val_part = 0.2
+    assert len(all_images) == len(all_txts), 'len(images) != len(annotations)'
+
+    # print(f'Total images: {len(all_images)}')
+    # print(f'Total labels: {len(all_txts)}')
 
     labels = []
     for txt in tqdm(all_txts, desc='Calc all txts'):
@@ -85,7 +90,7 @@ def train_val_split(input_dir, images_ext, split_train_dir, split_val_dir):
 
     # collect train classes and compare with all classes
     labels_train = []
-    for txt in tqdm(all_txt_train):
+    for txt in tqdm(all_txt_train, desc="Calc statistics"):
         lines = loadtxt(str(txt), delimiter=' ', unpack=False)
         if lines.shape.__len__() == 1:
             lines = [lines]
@@ -117,4 +122,6 @@ if __name__ == '__main__':
     split_val_dir = 'data/train_val_split/output/val'
     recreate_folder(split_val_dir)
 
-    train_val_split(input_dir, images_ext, split_train_dir, split_val_dir)
+    val_part = 0.25
+
+    train_val_split(input_dir, images_ext, split_train_dir, split_val_dir, val_part)

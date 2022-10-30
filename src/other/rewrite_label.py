@@ -22,7 +22,6 @@ def rewrite_label(input_dir: str, output_dir: str, new_label: str, ext_image: st
             newline = new_label + " " + " ".join(line.split()[1:])
             new_lines.append(newline)
 
-
         with open(Path(output_dir).joinpath(txt_path.name), 'w') as f:
             for line in new_lines:
                 f.write("%s\n" % str(line))
@@ -34,8 +33,10 @@ if __name__ == "__main__":
     input_dir = "data/rewrite_label/input"
     ext_image = "jpg"
 
+    new_label = "4"
     output_dir = "data/rewrite_label/output"
     recreate_folder(output_dir)
+    output_dir = Path(output_dir).joinpath(new_label)
+    recreate_folder(output_dir)
 
-    new_label = "7"
     rewrite_label(input_dir, output_dir, new_label, ext_image)

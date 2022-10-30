@@ -38,7 +38,7 @@ def merge_txts_labels(input_dir: str, output_dir: str, image_ext: str) -> None:
 
 if __name__ == "__main__":
     input_dir = "data/merge_txts_labels/input"
-    ext_image = "jpg"
+    ext_image = "png"
 
     output_dir = "data/merge_txts_labels/output"
     recreate_folder(output_dir)

@@ -44,7 +44,7 @@ def split_yolo_txts_on_labels(input_dir: str, output_dir: str, empty_dir: str, e
 
 if __name__ == "__main__":
     input_dir = "data/split_yolo_txts_on_labels/input"
-    ext_image = "jpg"
+    ext_image = "png"
 
     output_dir = "data/split_yolo_txts_on_labels/output"
     recreate_folder(output_dir)
