@@ -1,6 +1,6 @@
 import shutil
 
-from my_utils import recreate_folder, get_all_files_in_folder
+from helpers import recreate_folder, get_all_files_in_folder
 
 from pathlib import Path
 from tqdm import tqdm

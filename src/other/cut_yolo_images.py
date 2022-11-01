@@ -5,36 +5,7 @@ import random
 from tqdm import tqdm
 from pathlib import Path
 
-from my_utils import get_all_files_in_folder, recreate_folder, plot_one_box
-
-
-def box_area(box):
-    return (box[2] - box[0]) * (box[3] - box[1])
-
-
-def xywhn2xyxy(x, w=640, h=640, padw=0, padh=0):
-    # Convert nx4 boxes from [x, y, w, h] normalized to [x1, y1, x2, y2] where xy1=top-left, xy2=bottom-right
-    y = np.copy(x)
-    y[0] = w * (x[0] - x[2] / 2) + padw  # top left x
-    y[1] = h * (x[1] - x[3] / 2) + padh  # top left y
-    y[2] = w * (x[0] + x[2] / 2) + padw  # bottom right x
-    y[3] = h * (x[1] + x[3] / 2) + padh  # bottom right y
-
-    y = [int(a) for a in y]
-    return y
-
-
-def get_intersection_area(image_box, annot_box):
-    x1 = max(image_box[0], annot_box[0])
-    y1 = max(image_box[1], annot_box[1])
-    x2 = min(image_box[2], annot_box[2])
-    y2 = min(image_box[3], annot_box[3])
-
-    intersection = 0
-    if ((x2 - x1) >= 0) and ((y2 - y1) >= 0):
-        intersection = (x2 - x1) * (y2 - y1)
-
-    return intersection
+from helpers import get_all_files_in_folder, recreate_folder, plot_one_box, xywhn2xyxy, box_area, get_intersection_area
 
 
 def plot_yolo_box(input_images_dir, images_ext, output_dir, classes_path, filter_classes):
@@ -95,9 +66,9 @@ def get_image_parts(img, desired_size):
 
     parts_images = []
     sizes = []
-    for _ in (range(parts_w)):
-        for _ in (range(parts_h)):
-            parts_images.append([min_x, min_y, max_x, max_y])
+    for i in (range(parts_w)):
+        for j in (range(parts_h)):
+            parts_images.append([min_x, min_y, max_x, max_y, i, j])
             sizes.append((max_x - min_x) * (max_y - min_y))
 
             min_y = max_y - one_part_extra_h
@@ -109,7 +80,7 @@ def get_image_parts(img, desired_size):
         min_y = 0
         max_y = min(desired_size[1], h)
 
-    return parts_images
+    return parts_images, one_part_extra_w, one_part_extra_h
 
 
 def main(
@@ -123,8 +94,6 @@ def main(
         save_vis,
         min_intersection
 ):
-
-
     images = get_all_files_in_folder(data_dir, [f'*.{images_ext}'])
     annotations = get_all_files_in_folder(data_dir, ['*.txt'])
 
@@ -136,7 +105,7 @@ def main(
 
         desired_size = random.choice(desired_sizes)
 
-        parts_images = get_image_parts(img, desired_size)
+        parts_images, one_part_extra_w, one_part_extra_h = get_image_parts(img, desired_size)
 
         with open(im.parent.joinpath(f'{im.stem}.txt')) as file:
             annotations = file.readlines()
@@ -183,20 +152,25 @@ def main(
 
             part_images_annotations.append(image_annotations)
 
-        for i, (image_box, annot_pack) in enumerate(zip(parts_images, part_images_annotations)):
-            img_part = img[image_box[1]:image_box[3], image_box[0]:image_box[2]]
-            cv2.imwrite(str(Path(output_annot_dir).joinpath(f'{im.stem}_{i}.{images_ext}')), img_part)
+        for i, (part_image, annot_pack) in enumerate(zip(parts_images, part_images_annotations)):
+            img_part = img[part_image[1]:part_image[3], part_image[0]:part_image[2]]
+            cv2.imwrite(str(Path(output_annot_dir).joinpath(
+                f'{im.stem}_{desired_size[0]}_{desired_size[1]}_{one_part_extra_w}_{one_part_extra_h}_{part_image[4]}_{part_image[5]}.{images_ext}')),
+                img_part)
 
             four_exist = False
-            with open(Path(output_annot_dir).joinpath(f'{im.stem}_{i}.txt'), 'w') as f:
+            with open(Path(output_annot_dir).joinpath(
+                    f'{im.stem}_{desired_size[0]}_{desired_size[1]}_{one_part_extra_w}_{one_part_extra_h}_{part_image[4]}_{part_image[5]}.txt'),
+                    'w') as f:
                 for an in annot_pack:
                     if int(an[0]) == 4:
                         four_exist = True
                     f.write(f"{an[0]} {an[1]} {an[2]} {an[3]} {an[4]}\n")
 
             if not four_exist:
-                cv2.imwrite(str(Path('data/cut_yolo_images/output/11').joinpath(f'{im.stem}_{i}.{images_ext}')),
-                            img_part)
+                cv2.imwrite(str(Path('data/cut_yolo_images/output/11').joinpath(
+                    f'{im.stem}_{desired_size[0]}_{desired_size[1]}_{one_part_extra_w}_{one_part_extra_h}_{part_image[4]}_{part_image[5]}.{images_ext}')),
+                    img_part)
 
     if save_vis:
         plot_yolo_box(output_annot_dir, images_ext, output_vis_dir, classes_path, filter_classes)
@@ -215,7 +189,7 @@ if __name__ == '__main__':
     filter_classes = None  # ['clefG', 'clefF', 'ledgerLine', 'noteheadBlackOnLine', 'noteheadBlackInSpace', 'staff']
     classes_path = 'data/cut_yolo_images/classes.txt'
 
-    desired_sizes = [[320, 320], [480, 480], [640, 640], [800, 800], [960, 960], [1120, 1120], [1280, 1280]]  # w, h
+    desired_sizes = [[640, 640]]  # w, h
 
     min_intersection = {
         999: 0.5,

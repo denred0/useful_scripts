@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from tqdm import tqdm
 
-from my_utils import get_all_files_in_folder, recreate_folder, plot_one_box, get_iou
+from helpers import get_all_files_in_folder, recreate_folder, plot_one_box, get_iou
 
 input_dir = "data/podrydchiki/input"
 output_dir = "data/podrydchiki/output"

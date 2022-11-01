@@ -7,7 +7,7 @@ from tqdm import tqdm
 from helpers import get_all_files_in_folder, recreate_folder
 
 
-def rewrite_label(input_dir: str, output_dir: str, new_label: str, ext_image: str) -> None:
+def rewrite_label(input_dir: str, mapping: dict, output_dir: str, ext_image: str) -> None:
     txt_paths = get_all_files_in_folder(input_dir, ["*.txt"])
 
     for txt_path in tqdm(txt_paths):
@@ -18,8 +18,7 @@ def rewrite_label(input_dir: str, output_dir: str, new_label: str, ext_image: st
         new_lines = []
         for line in lines:
             label = line.split()[0]
-
-            newline = new_label + " " + " ".join(line.split()[1:])
+            newline = str(mapping[int(label)]) + " " + " ".join(line.split()[1:])
             new_lines.append(newline)
 
         with open(Path(output_dir).joinpath(txt_path.name), 'w') as f:
@@ -30,13 +29,12 @@ def rewrite_label(input_dir: str, output_dir: str, new_label: str, ext_image: st
 
 
 if __name__ == "__main__":
-    input_dir = "data/rewrite_label/input"
-    ext_image = "jpg"
+    input_dir = "data/rewrite_label_multiple/input"
+    ext_image = "png"
 
-    new_label = "4"
-    output_dir = "data/rewrite_label/output"
-    recreate_folder(output_dir)
-    output_dir = Path(output_dir).joinpath(new_label)
+    output_dir = "data/rewrite_label_multiple/output"
     recreate_folder(output_dir)
 
-    rewrite_label(input_dir, output_dir, new_label, ext_image)
+    mapping = {6: 0, 9: 1, 25: 2, 27: 3, 135: 4}
+
+    rewrite_label(input_dir, mapping, output_dir, ext_image)

@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from tqdm import tqdm
 
-from my_utils import get_all_files_in_folder, read_config
+from helpers import get_all_files_in_folder, read_config
 from verify_markup import merge_txts_labels
 
 

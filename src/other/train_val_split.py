@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from pathlib import Path
 from typing import List
 
-from my_utils import get_all_files_in_folder, recreate_folder
+from helpers import get_all_files_in_folder, recreate_folder
 
 import warnings
 

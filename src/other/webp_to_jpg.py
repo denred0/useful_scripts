@@ -4,7 +4,7 @@ import shutil
 from tqdm import tqdm
 from pathlib import Path
 
-from my_utils import recreate_folder, get_all_files_in_folder
+from helpers import recreate_folder, get_all_files_in_folder
 
 
 def main(input_dir, output_dir):

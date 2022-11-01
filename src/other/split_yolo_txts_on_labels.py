@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from tqdm import tqdm
 
-from my_utils import get_all_files_in_folder, recreate_folder
+from helpers import get_all_files_in_folder, recreate_folder
 
 
 def split_yolo_txts_on_labels(input_dir: str, output_dir: str, empty_dir: str, ext_image: str) -> None:

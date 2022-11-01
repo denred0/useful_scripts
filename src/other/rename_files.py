@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from tqdm import tqdm
 
-from my_utils import recreate_folder, get_all_files_in_folder
+from helpers import recreate_folder, get_all_files_in_folder
 
 output_folder = "data/rename_files/output"
 recreate_folder(output_folder)

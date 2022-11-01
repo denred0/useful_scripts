@@ -2,7 +2,7 @@ import shutil
 import os
 
 from tqdm import tqdm
-from my_utils import recreate_folder, get_all_files_in_folder
+from helpers import recreate_folder, get_all_files_in_folder
 
 input_dir = "data/rename_txt_files/input"
 output_dir = "data/rename_txt_files/output"

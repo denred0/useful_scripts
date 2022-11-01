@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 
-from my_utils import recreate_folder, get_all_files_in_folder
+from helpers import recreate_folder, get_all_files_in_folder
 
 
 def set_mask_on_image(template_mask, input_dir: str, output_dir: str, ext_image: str):

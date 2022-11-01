@@ -5,7 +5,7 @@ from pathlib import Path
 from tqdm import tqdm
 from pathlib import Path
 
-from my_utils import get_all_files_in_folder, recreate_folder
+from helpers import get_all_files_in_folder, recreate_folder
 
 
 def merge_txts_labels(input_dir: str, output_dir: str, image_ext: str) -> None:

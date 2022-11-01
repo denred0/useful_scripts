@@ -6,7 +6,7 @@ from collections import defaultdict
 from tqdm import tqdm
 from pathlib import Path
 
-from my_utils import get_all_files_in_folder, recreate_folder, read_config, intersection_over_union_box
+from helpers import get_all_files_in_folder, recreate_folder, read_config, intersection_over_union_box
 
 
 def supplement_images_txt(project_name, ext):
