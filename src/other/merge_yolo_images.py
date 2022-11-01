@@ -7,22 +7,24 @@ from tqdm import tqdm
 from helpers import get_all_files_in_folder, recreate_folder, xywhn2xyxy, xyxy2xywhn_single
 
 
-def get_image_size(cut_size_x, cut_size_y, max_ind_x, max_ind_y, extra_part_x, extra_part_y):
+def get_image_size(cut_size_x, cut_size_y, max_ind_x, max_ind_y, extra_part_x, extra_part_y, h, w):
     min_x = 0
     min_y = 0
-    max_x = cut_size_x
-    max_y = cut_size_y
+    max_x = w if max_ind_x == 0 else cut_size_x
+    max_y = h if max_ind_y == 0 else cut_size_y
     for i in range(max_ind_x):
         for j in range(max_ind_y):
             min_y = max_y - extra_part_y
-            max_y = min_y + cut_size_y
+            add_y = h if max_ind_y == 0 else cut_size_y
+            max_y = min_y + add_y
 
         min_x = max_x - extra_part_x
-        max_x = min_x + cut_size_x
+        add_x = w if max_ind_x == 0 else cut_size_x
+        max_x = min_x + add_x
 
         min_y = 0
         if i != max_ind_x - 1:
-            max_y = cut_size_y
+            max_y = h if max_ind_y == 0 else cut_size_y
 
     return max_x, max_y
 
@@ -87,9 +89,21 @@ def main(input_dir, images_ext, output_dir):
 
         min_x = 0
         min_y = 0
-        max_x = cut_size_x
-        max_y = cut_size_y
-        w, h = get_image_size(cut_size_x, cut_size_y, max_ind_x, max_ind_y, extra_part_x, extra_part_y)
+
+        one_part = cv2.imread(str(parts['0_0']))
+        max_x = one_part.shape[1] if max_ind_x == 0 else cut_size_x
+        max_y = one_part.shape[0] if max_ind_y == 0 else cut_size_y
+
+        w, h = get_image_size(
+            cut_size_x,
+            cut_size_y,
+            max_ind_x,
+            max_ind_y,
+            extra_part_x,
+            extra_part_y,
+            one_part.shape[0],
+            one_part.shape[1]
+        )
         blank_image = np.zeros((h, w, 3), np.uint8)
         for i in range(max_ind_x + 1):
             for j in range(max_ind_y + 1):
@@ -105,8 +119,8 @@ def main(input_dir, images_ext, output_dir):
                 for an in annotations:
                     transformed_annotation = get_transformed_annotation(
                         an,
-                        cut_size_x,
-                        cut_size_y,
+                        one_part.shape[1] if max_ind_x == 0 else cut_size_x,
+                        one_part.shape[0] if max_ind_y == 0 else cut_size_y,
                         min_x,
                         min_y,
                         w,
